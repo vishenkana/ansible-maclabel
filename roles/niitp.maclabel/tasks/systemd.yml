@@ -1,0 +1,18 @@
+- name: Create directory systemd service {{ niitp_maclabel_service }}
+  file:
+    path: "/lib/systemd/system/{{ niitp_maclabel_service }}.service.d"
+    state: directory
+    mode: "0774"
+
+- name: Configure mandatory lable systemd service {{ niitp_maclabel_service }}
+  template:
+    src: 20-pdpl_label.conf.j2
+    dest: "/lib/systemd/system/{{ niitp_maclabel_service }}.service.d/20-pdpl_label.conf"
+    mode: "0644"
+  register: modify_result
+  notify: Restart systemd service
+
+- name: Add service to restart list
+  when: modify_result.changed
+  set_fact:
+    restart_services: "{{ restart_services }} + [ '{{ niitp_maclabel_service }}' ]"

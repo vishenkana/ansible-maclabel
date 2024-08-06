@@ -1,0 +1,21 @@
+---
+dependencies: []
+
+galaxy_info:
+  standalone: true
+  role_name: maclabel
+  author: niitp
+  description: Configure mandatory attributes in Astra Linux 1.7.
+  company: "JSC RI PI"
+  license: "license (UNKNOWN)"
+  min_ansible_version: '2.8'
+  platforms:
+    - name: Debian
+      versions:
+        - 'bullseye'
+  galaxy_tags:
+    - linux
+    - maclabel
+    - astra
+    - parsec
+    - systemd

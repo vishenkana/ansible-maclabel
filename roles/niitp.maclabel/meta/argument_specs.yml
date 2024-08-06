@@ -1,0 +1,14 @@
+---
+argument_specs:
+  systemd:
+    options:
+      niitp_maclabel_service:
+        type: "str"
+        required: true
+        description: "Systemd service name"
+
+      niitp_maclabel_service_label:
+        type: "int"
+        required: false
+        description: "Systemd service mandatory label"
+        default: 2

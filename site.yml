@@ -1,0 +1,24 @@
+- name: Set maclabel
+  hosts: hosts
+  become: true
+  tasks:
+    - name: Set service cmccmd maclabel
+      import_role:
+        name: niitp.maclabel
+        tasks_from: systemd
+      vars:
+        niitp_maclabel_service: cmccmd
+        niitp_maclabel_service_label: 2
+
+    - name: Set service cmchttp maclabel
+      import_role:
+        name: niitp.maclabel
+        tasks_from: systemd
+      vars:
+        niitp_maclabel_service: cmchttpd
+        niitp_maclabel_service_label: 2
+
+    - name: Set usermac user tasp
+      usermac:
+        user: tasp
+        max: 2

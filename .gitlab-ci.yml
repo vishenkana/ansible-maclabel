@@ -1,0 +1,41 @@
+variables:
+  ROLE_FILE: "niitp.maclabel.tar.gz"
+
+stages:
+  - analyze
+  - build
+  - deploy
+
+ansible-lint:
+  stage: analyze
+  tags:
+    - docker
+  image: gl-registry/adm/images/ansible:rocky
+  script:
+    - dnf install -y git-core
+    - ansible-lint --offline -p site.yml ./
+
+ansible-pack:
+  stage: build
+  tags:
+    - docker
+  image:
+    name: gl-registry/adm/images/ansible:rocky
+    entrypoint: [""]
+  script:
+    - tar -czvf $ROLE_FILE --owner=0 --group=0 --no-same-owner --no-same-permissions -C roles/*/ .
+  artifacts:
+    paths:
+      - $ROLE_FILE
+    expire_in: 1 day
+
+ansible-nexus:
+  stage: deploy
+  tags:
+    - docker
+  image: gl-registry/adm/images/ansible:rocky
+  script:
+    - |-
+       curl -u "$NEXUS_USER:$NEXUS_PASSWORD" --upload-file $ROLE_FILE $DEPLOY_REPO/$ROLE_FILE
+  dependencies: ["ansible-pack"]
+  needs: ["ansible-pack"]

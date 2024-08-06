@@ -1,0 +1,6 @@
+- name: Restart systemd service
+  service:
+    name: "{{ item }}"
+    state: restarted
+    daemon_reload: true
+  with_items: "{{ restart_services }}"
